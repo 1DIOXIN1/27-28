@@ -41,7 +41,10 @@ public class Wallet
     {
         value = Math.Abs(value);
         
-        _currencyWallet[currency] -= value;
+        if (_currencyWallet[currency] - value <= 0)
+            _currencyWallet[currency] = 0;
+        else
+            _currencyWallet[currency] -= value;
 
         OnCurrencyValueChanged?.Invoke(currency, _currencyWallet[currency]);
     }

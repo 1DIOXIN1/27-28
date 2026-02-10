@@ -13,6 +13,7 @@ public class Timer
     private MonoBehaviour _coroutineRunner;
 
     public float Progress => _startTime > 0 ? _currentTime / _startTime : 0;
+    public float StartTime => _startTime;
     public bool IsLaunched => _countdownCoroutine != null;
 
     public Timer(MonoBehaviour coroutineRunner)
@@ -22,12 +23,18 @@ public class Timer
 
     public void AddOneSecond()
     {
+        if(IsLaunched)
+            return;
+
         _currentTime++;
         _startTime++;
     }
 
     public void ReduceOneSecond()
     {
+        if(IsLaunched)
+            return;
+
         if(_startTime - 1 < 0)
             return;
 
@@ -40,6 +47,11 @@ public class Timer
     public float GetCurrentTime()
     {
         return _currentTime;
+    }
+
+    public int GetCurrentTimeInSeconds()
+    {
+        return Mathf.CeilToInt(_currentTime);
     }
 
     public void Start()
@@ -73,15 +85,19 @@ public class Timer
         if(IsLaunched)
         {
             _coroutineRunner.StopCoroutine(_countdownCoroutine);
+
+            _countdownCoroutine = null;
+            _currentTime = 0;
+            _startTime = _currentTime;
+
+            TimeChanged?.Invoke();
         }
-        
-        _countdownCoroutine = null;
-        _currentTime = 0;
-        _startTime = _currentTime;
     }
 
     public void SetTime(float time)
     {
+        time = Mathf.Abs(time);
+        
         _currentTime = time;
         _startTime = time;
     }
@@ -100,6 +116,7 @@ public class Timer
             if (_currentTime <= 0)
             {
                 TimerEnded?.Invoke();
+                _startTime = 0;
                 break;
             }
 

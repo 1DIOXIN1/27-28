@@ -1,40 +1,38 @@
-using UnityEngine;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class EnemyLifeChecker : MonoBehaviour
 {
-    private int _maxEnemyCount = 3;
+    [SerializeField] private int _maxEnemyCount = 3;
     private List<Enemy> _enemyList = new();
+    private Dictionary<Enemy, Func<bool>> _deathConditions = new();
 
     public int MaxEnemyCount => _maxEnemyCount;
 
-    public void Update()
+    private void Update()
     {
         CheckEnemiesCondition();
-
-        Debug.Log(GetCountEnemy());
+        Debug.Log(_enemyList.Count);
     }
 
     public void RegisterEnemy(Enemy enemy, Func<bool> dieCondition)
     {
-        enemy.SetDieCondition(dieCondition);
-
         _enemyList.Add(enemy);
+        _deathConditions[enemy] = dieCondition;
     }
 
-    public int GetCountEnemy()
-    {
-        return _enemyList.Count;
-    }
+    public int GetCountEnemy() => _enemyList.Count;
 
     private void CheckEnemiesCondition()
     {
         for (int i = _enemyList.Count - 1; i >= 0; i--)
         {
             Enemy enemy = _enemyList[i];
-            if (enemy.ShouldBeDead())
+
+            if (_deathConditions.TryGetValue(enemy, out var condition) && condition())
             {
+                _deathConditions.Remove(enemy);
                 _enemyList.RemoveAt(i);
                 Destroy(enemy.gameObject);
             }
@@ -43,10 +41,13 @@ public class EnemyLifeChecker : MonoBehaviour
 
     public void RandomEnemyDeath()
     {
-        if (_enemyList.Count > 0)
-        {
-            int randomIndex = UnityEngine.Random.Range(0, _enemyList.Count);
-            _enemyList[randomIndex].Die();
-        }
+        if (_enemyList.Count == 0) return;
+
+        int randomIndex = UnityEngine.Random.Range(0, _enemyList.Count);
+        Enemy enemy = _enemyList[randomIndex];
+
+        _deathConditions.Remove(enemy);
+        _enemyList.RemoveAt(randomIndex);
+        Destroy(enemy.gameObject);
     }
 }

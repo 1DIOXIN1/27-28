@@ -10,7 +10,7 @@ public enum Currency
 
 public class Wallet
 {
-    public event Action<Currency, int> OnCurrencyValueChanged;
+    public event Action<Currency, int> CurrencyValueChanged;
     private Dictionary<Currency, int> _currencyWallet;
 
     public Wallet()
@@ -34,7 +34,7 @@ public class Wallet
 
         _currencyWallet[currency] += value;
 
-        OnCurrencyValueChanged?.Invoke(currency, _currencyWallet[currency]);
+        CurrencyValueChanged?.Invoke(currency, _currencyWallet[currency]);
     }
 
     public void RemoveValue(Currency currency, int value)
@@ -46,6 +46,6 @@ public class Wallet
         else
             _currencyWallet[currency] -= value;
 
-        OnCurrencyValueChanged?.Invoke(currency, _currencyWallet[currency]);
+        CurrencyValueChanged?.Invoke(currency, _currencyWallet[currency]);
     }
 }

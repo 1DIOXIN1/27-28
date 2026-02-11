@@ -23,49 +23,68 @@ public class Timer
 
     public void AddOneSecond()
     {
-        if(IsLaunched)
+        if (IsLaunched)
             return;
 
         _currentTime++;
         _startTime++;
+
+        TimeChanged?.Invoke();
     }
 
     public void ReduceOneSecond()
     {
-        if(IsLaunched)
+        if (IsLaunched)
             return;
 
-        if(_startTime - 1 < 0)
+        if (_startTime - 1 < 0)
             return;
 
         _currentTime--;
         _startTime--;
-        
+
         if (_currentTime < 0) _currentTime = 0;
+
+        TimeChanged?.Invoke();
     }
 
-    public float GetCurrentTime()
+    public void SetTime(float time)
     {
-        return _currentTime;
+        time = Mathf.Abs(time);
+        _currentTime = time;
+        _startTime = time;
+
+        TimeChanged?.Invoke();
     }
 
-    public int GetCurrentTimeInSeconds()
+    public void Reset()
     {
-        return Mathf.CeilToInt(_currentTime);
+        if (IsLaunched)
+        {
+            _coroutineRunner.StopCoroutine(_countdownCoroutine);
+            _countdownCoroutine = null;
+        }
+
+        _currentTime = 0;
+        _startTime = 0;
+
+        TimeChanged?.Invoke();
     }
+
+    public float GetCurrentTime() => _currentTime;
+    public int GetCurrentTimeInSeconds() => Mathf.CeilToInt(_currentTime);
 
     public void Start()
     {
-        if(_currentTime <= 0)
-            return;
+        if (_currentTime <= 0) return;
 
-        if(IsLaunched == false)
+        if (IsLaunched == false)
             _countdownCoroutine = _coroutineRunner.StartCoroutine(Countdown());
     }
 
     public void Stop()
     {
-        if(IsLaunched)
+        if (IsLaunched)
         {
             _coroutineRunner.StopCoroutine(_countdownCoroutine);
             _countdownCoroutine = null;
@@ -74,45 +93,21 @@ public class Timer
 
     public void Resume()
     {
-        if(!IsLaunched && _currentTime > 0)
-        {
+        if (!IsLaunched && _currentTime > 0)
             _countdownCoroutine = _coroutineRunner.StartCoroutine(Countdown());
-        }
-    }
-
-    public void Reset()
-    {
-        if(IsLaunched)
-        {
-            _coroutineRunner.StopCoroutine(_countdownCoroutine);
-
-            _countdownCoroutine = null;
-            _currentTime = 0;
-            _startTime = _currentTime;
-
-            TimeChanged?.Invoke();
-        }
-    }
-
-    public void SetTime(float time)
-    {
-        time = Mathf.Abs(time);
-        
-        _currentTime = time;
-        _startTime = time;
     }
 
     private IEnumerator Countdown()
     {
-        while(_currentTime > 0)
+        while (_currentTime > 0)
         {
             _currentTime -= Time.deltaTime;
             
             if (_currentTime <= 0)
                 _currentTime = 0;
-            
+
             TimeChanged?.Invoke();
-            
+
             if (_currentTime <= 0)
             {
                 TimerEnded?.Invoke();
@@ -122,7 +117,7 @@ public class Timer
 
             yield return null;
         }
-        
+
         _countdownCoroutine = null;
     }
 }

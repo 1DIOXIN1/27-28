@@ -14,7 +14,7 @@ public class WalletView : MonoBehaviour
     public void Initialize(Wallet wallet)
     {
         _wallet = wallet;
-        _wallet.OnCurrencyValueChanged += UpdateCurrencyValueText;
+        _wallet.CurrencyValueChanged += UpdateCurrencyValueText;
 
         _currencyTextDictionary = new Dictionary<Currency, Text>
         {

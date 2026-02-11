@@ -249,6 +249,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 111788018}
+  - component: {fileID: 111788021}
+  - component: {fileID: 111788020}
   - component: {fileID: 111788019}
   m_Layer: 5
   m_Name: Timer
@@ -294,11 +296,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 111788017}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 315f55f6909e9f842a9494e413156627, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e3f592aa53b4b9469018f8a8bfb1a83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &111788020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 111788017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6217a6ef47b94a347a575f676fe18d20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _slider: {fileID: 1031246060}
   _text: {fileID: 1766594890}
+--- !u!114 &111788021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 111788017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9fbb935fad731c4dbe7da67d93a464a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _heartPrefab: {fileID: 1987317509238153232, guid: f11b16b01c3eb1d43bc038cd5d544b6b, type: 3}
   _heartParent: {fileID: 2083812739}
 --- !u!1 &113025051
@@ -462,7 +488,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _walletView: {fileID: 1580084146}
-  _timerView: {fileID: 111788019}
+  _timerSliderView: {fileID: 111788020}
+  _timerHeartsView: {fileID: 111788021}
+  _timerControls: {fileID: 111788019}
   _enemyPrefab: {fileID: 6667017026184066802, guid: 5c38356091149f94e95167a3fe851245, type: 3}
   _spawnPoint: {fileID: 912052627}
   _enemyLifeChecker: {fileID: 234830186}
@@ -806,7 +834,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 111788019}
-        m_TargetAssemblyTypeName: TimerView, Assembly-CSharp
+        m_TargetAssemblyTypeName: TimerControls, Assembly-CSharp
         m_MethodName: ResetTimer
         m_Mode: 1
         m_Arguments:
@@ -1200,7 +1228,7 @@ GameObject:
   m_Component:
   - component: {fileID: 733259796}
   m_Layer: 5
-  m_Name: Resources
+  m_Name: Wallet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1241,7 +1269,7 @@ GameObject:
   - component: {fileID: 778370128}
   - component: {fileID: 778370127}
   m_Layer: 5
-  m_Name: ReduceButton
+  m_Name: ReduceTimeButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1311,7 +1339,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 111788019}
-        m_TargetAssemblyTypeName: TimerView, Assembly-CSharp
+        m_TargetAssemblyTypeName: TimerControls, Assembly-CSharp
         m_MethodName: ReduceOneSecond
         m_Mode: 1
         m_Arguments:
@@ -1444,7 +1472,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 111788019}
-        m_TargetAssemblyTypeName: TimerView, Assembly-CSharp
+        m_TargetAssemblyTypeName: TimerControls, Assembly-CSharp
         m_MethodName: StartTimer
         m_Mode: 1
         m_Arguments:
@@ -1934,7 +1962,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 111788019}
-        m_TargetAssemblyTypeName: TimerView, Assembly-CSharp
+        m_TargetAssemblyTypeName: TimerControls, Assembly-CSharp
         m_MethodName: StopTimer
         m_Mode: 1
         m_Arguments:
@@ -2456,7 +2484,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 111788019}
-        m_TargetAssemblyTypeName: TimerView, Assembly-CSharp
+        m_TargetAssemblyTypeName: TimerControls, Assembly-CSharp
         m_MethodName: ResumeTimer
         m_Mode: 1
         m_Arguments:
@@ -2578,7 +2606,7 @@ GameObject:
   - component: {fileID: 2146344447}
   - component: {fileID: 2146344446}
   m_Layer: 5
-  m_Name: AddButton
+  m_Name: AddTimeButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2648,7 +2676,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 111788019}
-        m_TargetAssemblyTypeName: TimerView, Assembly-CSharp
+        m_TargetAssemblyTypeName: TimerControls, Assembly-CSharp
         m_MethodName: AddOneSecond
         m_Mode: 1
         m_Arguments:

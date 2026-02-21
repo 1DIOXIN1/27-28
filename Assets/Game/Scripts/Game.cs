@@ -7,16 +7,28 @@ public class Game : MonoBehaviour
     [SerializeField] private TimerHeartsView _timerHeartsView;
     [SerializeField] private TimerControls _timerControls;
 
-    [SerializeField] private Enemy _enemyPrefab;
-    [SerializeField] private Transform _spawnPoint; 
-    [SerializeField] private EnemyLifeChecker _enemyLifeChecker;
+    [SerializeField] private Transform _spawnPoint;
+    [SerializeField] private EnemiesSpawner _enemySpawner;
+    [SerializeField] private OrkConfig[] _orkConfigs;
+    [SerializeField] private ElfConfig[] _elfConfigs;
+    [SerializeField] private DragonConfig[] _dragonConfigs;
 
     private Wallet _wallet;
     private Timer _timer;
 
-    private void Awake() => Initialization();
+    private void Awake()
+    {
+        Initialization();
 
-    private void Update() => KeyBoardInput();
+        foreach (var config in _orkConfigs)
+            _enemySpawner.Spawn(config, GetRandomPoint());
+        
+        foreach (var config in _elfConfigs)
+            _enemySpawner.Spawn(config, GetRandomPoint());
+        
+        foreach (var config in _dragonConfigs)
+            _enemySpawner.Spawn(config, GetRandomPoint());
+    }
 
     private void Initialization()
     {
@@ -29,32 +41,5 @@ public class Game : MonoBehaviour
         _timerControls.Initialize(_timer);
     }
 
-    private void KeyBoardInput()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            Enemy enemy = Instantiate(_enemyPrefab, _spawnPoint.position, Quaternion.identity);
-            _enemyLifeChecker.RegisterEnemy(enemy, () => enemy.IsDead);
-            Debug.Log("Создан враг с условием IsDead");
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            Enemy enemy = Instantiate(_enemyPrefab, _spawnPoint.position, Quaternion.identity);
-            _enemyLifeChecker.RegisterEnemy(enemy, () => enemy.LifeTime > 5f);
-            Debug.Log("Создан враг с условием LifeTime > 5f");
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            Enemy enemy = Instantiate(_enemyPrefab, _spawnPoint.position, Quaternion.identity);
-            _enemyLifeChecker.RegisterEnemy(enemy, () => _enemyLifeChecker.GetCountEnemy() > _enemyLifeChecker.MaxEnemyCount);
-            Debug.Log("Создан враг с условием MaxEnemyCount");
-        }
-
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            _enemyLifeChecker.RandomEnemyDeath();
-        }
-    }
+    private Vector3 GetRandomPoint() => _spawnPoint.position * Random.insideUnitCircle;
 }

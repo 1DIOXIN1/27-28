@@ -4,32 +4,32 @@ using UnityEngine;
 
 public class Timer
 {
-    public event Action TimeChanged;
-    public event Action TimerEnded;
+    public ReactiveVariable<float> CurrentTime = new ReactiveVariable<float>();
+    public ReactiveVariable<float> StartTime = new ReactiveVariable<float>();
+    private ReactiveVariable<float> _progress = new ReactiveVariable<float>();
 
-    private float _startTime = 0;
-    private float _currentTime = 0;
+    public event Action TimerEnded;
     private Coroutine _countdownCoroutine;
     private MonoBehaviour _coroutineRunner;
-
-    public float Progress => _startTime > 0 ? _currentTime / _startTime : 0;
-    public float StartTime => _startTime;
     public bool IsLaunched => _countdownCoroutine != null;
 
     public Timer(MonoBehaviour coroutineRunner)
     {
+        CurrentTime.Changed += (old, current) => UpdateProgress();
+        StartTime.Changed += (old, current) => UpdateProgress();
+
         _coroutineRunner = coroutineRunner;
     }
+
+    public ReactiveVariable<float> Progress => _progress;
 
     public void AddOneSecond()
     {
         if (IsLaunched)
             return;
 
-        _currentTime++;
-        _startTime++;
-
-        TimeChanged?.Invoke();
+        CurrentTime.Value++;
+        StartTime.Value++;
     }
 
     public void ReduceOneSecond()
@@ -37,24 +37,21 @@ public class Timer
         if (IsLaunched)
             return;
 
-        if (_startTime - 1 < 0)
+        if (StartTime.Value - 1 < 0)
             return;
 
-        _currentTime--;
-        _startTime--;
+        CurrentTime.Value--;
+        StartTime.Value--;
 
-        if (_currentTime < 0) _currentTime = 0;
-
-        TimeChanged?.Invoke();
+        if (CurrentTime.Value < 0) 
+            CurrentTime.Value = 0;
     }
 
     public void SetTime(float time)
     {
         time = Mathf.Abs(time);
-        _currentTime = time;
-        _startTime = time;
-
-        TimeChanged?.Invoke();
+        CurrentTime.Value = time;
+        StartTime.Value = time;
     }
 
     public void Reset()
@@ -65,18 +62,16 @@ public class Timer
             _countdownCoroutine = null;
         }
 
-        _currentTime = 0;
-        _startTime = 0;
-
-        TimeChanged?.Invoke();
+        CurrentTime.Value = 0;
+        StartTime.Value = 0;
     }
 
-    public float GetCurrentTime() => _currentTime;
-    public int GetCurrentTimeInSeconds() => Mathf.CeilToInt(_currentTime);
+    public float GetCurrentTime() => CurrentTime.Value;
+    public int GetCurrentTimeInSeconds() => Mathf.CeilToInt(CurrentTime.Value);
 
     public void Start()
     {
-        if (_currentTime <= 0) return;
+        if (CurrentTime.Value <= 0) return;
 
         if (IsLaunched == false)
             _countdownCoroutine = _coroutineRunner.StartCoroutine(Countdown());
@@ -93,25 +88,24 @@ public class Timer
 
     public void Resume()
     {
-        if (!IsLaunched && _currentTime > 0)
+        if (!IsLaunched && CurrentTime.Value > 0)
             _countdownCoroutine = _coroutineRunner.StartCoroutine(Countdown());
     }
 
     private IEnumerator Countdown()
     {
-        while (_currentTime > 0)
+        while (CurrentTime.Value > 0)
         {
-            _currentTime -= Time.deltaTime;
+            CurrentTime.Value -= Time.deltaTime;
             
-            if (_currentTime <= 0)
-                _currentTime = 0;
+            if (CurrentTime.Value <= 0)
+                CurrentTime.Value = 0;
 
-            TimeChanged?.Invoke();
 
-            if (_currentTime <= 0)
+            if (CurrentTime.Value <= 0)
             {
                 TimerEnded?.Invoke();
-                _startTime = 0;
+                StartTime.Value = 0;
                 break;
             }
 
@@ -119,5 +113,10 @@ public class Timer
         }
 
         _countdownCoroutine = null;
+    }
+
+    private void UpdateProgress()
+    {
+        _progress.Value = StartTime.Value > 0 ? CurrentTime.Value / StartTime.Value : 0;
     }
 }

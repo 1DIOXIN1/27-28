@@ -13,7 +13,6 @@ public class EnemyLifeChecker : MonoBehaviour
     private void Update()
     {
         CheckEnemiesCondition();
-        Debug.Log(_enemyList.Count);
     }
 
     public void RegisterEnemy(Enemy enemy, Func<bool> dieCondition)

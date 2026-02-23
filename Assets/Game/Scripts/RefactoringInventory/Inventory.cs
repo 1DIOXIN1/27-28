@@ -4,10 +4,10 @@ using System.Linq;
 
 public class Inventory
 {
-    private List<Item> _items;
+    private List<ItemSlot> _items;
     private int _maxSize;
 
-    public Inventory(List<Item> initialItems, int maxSize)
+    public Inventory(List<ItemSlot> initialItems, int maxSize)
     {
         if (maxSize <= 0)
             throw new ArgumentException(nameof(maxSize), "Максимальный размер должен быть положительным");
@@ -15,7 +15,7 @@ public class Inventory
         if (initialItems == null)
             throw new ArgumentNullException(nameof(initialItems));
 
-        _items = new List<Item>();
+        _items = new List<ItemSlot>();
         _maxSize = maxSize;
 
         foreach (var item in initialItems)
@@ -31,9 +31,9 @@ public class Inventory
     
     public int MaxSize => _maxSize;
     public int CurrentSize => _items.Sum(item => item.Count);
-    public IReadOnlyList<Item> Items => _items;
+    public IReadOnlyList<ItemSlot> Items => _items;
 
-    public bool TryAdd(Item item)
+    public bool TryAdd(ItemSlot item)
     {
         if (item == null) throw new ArgumentNullException(nameof(item));
 
@@ -61,7 +61,7 @@ public class Inventory
         return totalAvailable >= count;
     }
 
-    public List<Item> TakeItems(string name, int count)
+    public IReadOnlyList<ItemSlot> TakeItems(string name, int count)
     {
         if (name == null)
             throw new ArgumentNullException(nameof(name));
@@ -70,9 +70,9 @@ public class Inventory
             throw new ArgumentOutOfRangeException(nameof(count), "Передано отрицательное значение");
 
         if(CanTakeItems(name, count) == false)
-            return new List<Item>();
+            return new List<ItemSlot>();
 
-        var taken = new List<Item>();
+        var taken = new List<ItemSlot>();
         int remaining = count;
 
         for (int i = _items.Count - 1; i >= 0 && remaining > 0; i--)
@@ -83,13 +83,13 @@ public class Inventory
 
             if (item.Count <= remaining)
             {
-                taken.Add(new Item(name, item.Count));
+                taken.Add(new ItemSlot(name, item.Count));
                 remaining -= item.Count;
                 _items.RemoveAt(i);
             }
             else
             {
-                taken.Add(new Item(item.Name, remaining));
+                taken.Add(new ItemSlot(item.Name, remaining));
                 item.Reduce(remaining);
                 remaining = 0;
             }
@@ -99,9 +99,9 @@ public class Inventory
     }
 }
 
-public class Item
+public class ItemSlot
 {
-    public Item(string name, int startCount)
+    public ItemSlot(string name, int startCount)
     {
         Name = name;
 

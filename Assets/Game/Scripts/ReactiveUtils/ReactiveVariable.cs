@@ -1,8 +1,8 @@
 using System;
 
-public class ReactiveVariable<T> where T : IEquatable<T>
+public class ReactiveVariable<T>: IReadOnlyVariable<T> where T : IEquatable<T>
 {
-    public Action<T, T> Changed;
+    public event Action<T, T> Changed;
 
     private T _value;
 

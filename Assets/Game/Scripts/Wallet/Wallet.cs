@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 public enum Currency
 {
@@ -9,41 +10,42 @@ public enum Currency
 
 public class Wallet
 {
-    public ReactiveVariable<int> Coins;
-    public ReactiveVariable<int> Energy;
-    public ReactiveVariable<int> Diamond;
-    public ReactiveDictionary<Currency, ReactiveVariable<int>> CurrencyWallet = new();
+    private ReactiveVariable<int> _coins;
+    private ReactiveVariable<int> _energy;
+    private ReactiveVariable<int> _diamond;
+
+    private Dictionary<Currency, ReactiveVariable<int>> Currencies = new();
 
     public Wallet()
     {
-        Coins = new ReactiveVariable<int>(0);
-        Energy = new ReactiveVariable<int>(34);
-        Diamond = new ReactiveVariable<int>(151515);
+        _coins = new ReactiveVariable<int>(0);
+        _energy = new ReactiveVariable<int>(34);
+        _diamond = new ReactiveVariable<int>(151515);
 
-        CurrencyWallet.Add(Currency.Coin, Coins);
-        CurrencyWallet.Add(Currency.Energy, Energy);
-        CurrencyWallet.Add(Currency.Diamond, Diamond);
+        Currencies.Add(Currency.Coin, _coins);
+        Currencies.Add(Currency.Energy, _energy);
+        Currencies.Add(Currency.Diamond, _diamond);
     }
 
-    public ReactiveVariable<int> GetValue(Currency currency)
+    public IReadOnlyVariable<int> GetValue(Currency currency)
     {
-        return CurrencyWallet.Elements[currency];
+        return Currencies[currency];
     }
 
     public void AddValue(Currency currency, int value)
     {
         value = Math.Abs(value);
 
-        CurrencyWallet.Elements[currency].Value += value;
+        Currencies[currency].Value += value;
     }
 
     public void RemoveValue(Currency currency, int value)
     {
         value = Math.Abs(value);
         
-        if (CurrencyWallet.Elements[currency].Value - value <= 0)
-            CurrencyWallet.Elements[currency].Value = 0;
+        if (Currencies[currency].Value - value <= 0)
+            Currencies[currency].Value = 0;
         else
-            CurrencyWallet.Elements[currency].Value -= value;
+            Currencies[currency].Value -= value;
     }
 }

@@ -467,7 +467,6 @@ GameObject:
   m_Component:
   - component: {fileID: 234830185}
   - component: {fileID: 234830184}
-  - component: {fileID: 234830186}
   - component: {fileID: 234830187}
   m_Layer: 0
   m_Name: Game
@@ -488,7 +487,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26e165923b4b7bd49a96737bd287b69c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _walletView: {fileID: 1580084146}
+  _walletView: {fileID: 733259797}
   _timerSliderView: {fileID: 111788020}
   _timerHeartsView: {fileID: 111788021}
   _timerControls: {fileID: 111788019}
@@ -530,19 +529,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &234830186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 234830183}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 518c8961030869040bf2da7239f35a17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maxEnemyCount: 3
 --- !u!114 &234830187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -928,8 +914,9 @@ GameObject:
   - component: {fileID: 572779828}
   - component: {fileID: 572779827}
   - component: {fileID: 572779826}
+  - component: {fileID: 572779829}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: CoinsText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -996,6 +983,19 @@ RectTransform:
   m_AnchoredPosition: {x: -617, y: 140}
   m_SizeDelta: {x: 161.22998, y: 125.399994}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &572779829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 572779825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0243d292342e7846a5bb1b8380ee645, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currencyText: {fileID: 572779826}
 --- !u!1 &578760020
 GameObject:
   m_ObjectHideFlags: 0
@@ -1261,6 +1261,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 733259796}
+  - component: {fileID: 733259797}
   m_Layer: 5
   m_Name: Wallet
   m_TagString: Untagged
@@ -1290,6 +1291,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -1530, y: -816}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &733259797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 733259795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 513ca2d688d62f14ba77f3185277c44c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _coinsView: {fileID: 572779829}
+  _diamondsView: {fileID: 897862985}
+  _energyText: {fileID: 1572608005}
 --- !u!1 &778370125
 GameObject:
   m_ObjectHideFlags: 0
@@ -1597,8 +1613,9 @@ GameObject:
   - component: {fileID: 897862984}
   - component: {fileID: 897862983}
   - component: {fileID: 897862982}
+  - component: {fileID: 897862985}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: DiamondsText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1665,6 +1682,19 @@ RectTransform:
   m_AnchoredPosition: {x: -617, y: 0}
   m_SizeDelta: {x: 161.22998, y: 125.399994}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &897862985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897862981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0243d292342e7846a5bb1b8380ee645, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currencyText: {fileID: 897862982}
 --- !u!1 &912052626
 GameObject:
   m_ObjectHideFlags: 0
@@ -2056,8 +2086,9 @@ GameObject:
   - component: {fileID: 1572608004}
   - component: {fileID: 1572608003}
   - component: {fileID: 1572608002}
+  - component: {fileID: 1572608005}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: EnergyText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2124,6 +2155,19 @@ RectTransform:
   m_AnchoredPosition: {x: -617, y: -140}
   m_SizeDelta: {x: 161.22998, y: 125.399994}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1572608005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1572608001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0243d292342e7846a5bb1b8380ee645, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currencyText: {fileID: 1572608002}
 --- !u!1 &1580084145
 GameObject:
   m_ObjectHideFlags: 0
@@ -2136,7 +2180,6 @@ GameObject:
   - component: {fileID: 1580084149}
   - component: {fileID: 1580084148}
   - component: {fileID: 1580084147}
-  - component: {fileID: 1580084146}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2144,21 +2187,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1580084146
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1580084145}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 513ca2d688d62f14ba77f3185277c44c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _coinsText: {fileID: 572779826}
-  _diamondsText: {fileID: 897862982}
-  _energyText: {fileID: 1572608002}
 --- !u!114 &1580084147
 MonoBehaviour:
   m_ObjectHideFlags: 0
